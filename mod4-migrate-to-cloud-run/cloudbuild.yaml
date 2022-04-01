@@ -1,0 +1,10 @@
+steps:
+  - name: maven:3.8.4-eclipse-temurin-17-alpine
+    entrypoint: mvn
+    args: ["test"]
+  - name: maven:3.8.4-eclipse-temurin-17-alpine
+    entrypoint: mvn
+    args: ["package", "spring-boot:repackage", "-Dmaven.test.skip=true"]
+  - name: gcr.io/cloud-builders/docker
+    args: ["build", "-t", "northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/migration/visitors:latest", "--build-arg=JAR_FILE=target/visitors-1.0-SNAPSHOT.jar", "."]
+images: ["northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/migration/visitors:latest"]
