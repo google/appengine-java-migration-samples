@@ -1,10 +1,13 @@
 steps:
-  - name: maven:3.8.4-eclipse-temurin-17-alpine
+  # Test your build
+  - name: maven:eclipse-temurin
     entrypoint: mvn
     args: ["test"]
-  - name: maven:3.8.4-eclipse-temurin-17-alpine
+  # Build with Jib
+  - name: maven:eclipse-temurin
     entrypoint: mvn
-    args: ["package", "spring-boot:repackage", "-Dmaven.test.skip=true"]
-  - name: gcr.io/cloud-builders/docker
-    args: ["build", "-t", "northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/migration/visitors:latest", "--build-arg=JAR_FILE=target/visitors-1.0-SNAPSHOT.jar", "."]
-images: ["northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/migration/visitors:latest"]
+    args: [ "compile", "com.google.cloud.tools:jib-maven-plugin:3.2.1:build", "-Dimage=northamerica-northeast1-docker.pkg.dev/migration-new-run/migration/visitors:jib"]
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: [ 'run', 'deploy', 'visitors', '--image', 'northamerica-northeast1-docker.pkg.dev/migration-new-run/migration/visitors:jib', '--region', 'northamerica-northeast1', '--allow-unauthenticated']
