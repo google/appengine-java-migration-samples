@@ -50,7 +50,11 @@ version. Change this field to specify a specific version name.
 
     mvn package appengine:run
 
-To use vist: http://localhost:8080/
+To use visit: http://localhost:8080/
+
+If you encounter a "no_app_id" error when running your project locally, be sure to define your project ID with the GOOGLE_CLOUD_PROJECT environment variable:
+
+    export GOOGLE_CLOUD_PROJECT=<your-project-id>
 
 ### Deploying
 
