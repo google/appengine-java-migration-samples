@@ -1,0 +1,28 @@
+# Copyright 2022 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+steps:
+  # Test your build
+  # Using the latest eclipse-temurin version of Maven
+  - name: maven:eclipse-temurin
+    entrypoint: mvn
+    args: ["test"]
+  # Build with Jib
+  - name: maven:eclipse-temurin
+    entrypoint: mvn
+    args: [ "compile", "com.google.cloud.tools:jib-maven-plugin:3.2.1:build", "-Dimage=northamerica-northeast1-docker.pkg.dev/migration-new-run/migration/visitors:jib"]
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: [ 'run', 'deploy', 'visitors', '--image', 'northamerica-northeast1-docker.pkg.dev/migration-new-run/migration/visitors:jib', '--region', 'northamerica-northeast1', '--allow-unauthenticated']
