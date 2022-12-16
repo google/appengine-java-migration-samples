@@ -1,0 +1,14 @@
+steps:
+# Test your build
+# Using the latest eclipse-temurin version of Maven
+#  - name: maven:eclipse-temurin
+#    entrypoint: mvn
+#    args: ["test"]
+- name: maven:eclipse-temurin
+  entrypoint: mvn
+  args: [ "clean", "spring-boot:build-image", "-Dspring-boot.build-image.imageName=northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/migration/module4" ]
+# Deploy container image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: [ 'run', 'deploy', 'visitors', '--image', "northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/migration/module4", '--region', 'northamerica-northeast1' ]
+images: [ "northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/migration/module4" ]

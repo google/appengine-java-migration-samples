@@ -51,6 +51,11 @@ limitations under the License.
   </dependencyManagement>
   <dependencies>
     <!-- Compile/runtime dependencies -->
+
+    <dependency>
+      <groupId>com.google.cloud</groupId>
+      <artifactId>google-cloud-datastore</artifactId>
+    </dependency>
     <!-- App Engine SDK dependency : only required if you need to explicitly use App Engine API -->
     <dependency>
       <groupId>com.google.appengine</groupId>
